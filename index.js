@@ -10,6 +10,6 @@ import mongoose from 'mongoose';
 import appSrc from './app.js';
 
 
-const app = appScr(express, bodyParser, createReadStream, crypto, http, mongoose);
+const app = appSrc(express, bodyParser, createReadStream, crypto, http, mongoose);
 
 app.liste(process.env.PORT, '0.0.0.0');
