@@ -57,10 +57,7 @@ export default function appSrc(express, bodyParser, createReadStream, crypto, ht
         }
 
         try {
-            await mongoose.connect(URL, { 
-                useNewUrlParser: true, 
-                useUnifiedTopology: true 
-            });
+            await mongoose.connect(URL);
 
             const userSchema = new mongoose.Schema({
                 login: String,
