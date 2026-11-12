@@ -1,0 +1,15 @@
+import express from 'express';
+import bodyParser from 'body-parser'; 
+import { createReadStream } from 'fs';
+
+
+import crypto from 'crypto';
+import http from 'http';
+
+import mongoose from 'mongoose';
+import appSrc from './app.js';
+
+
+const app = appScr(express, bodyParser, createReadStream, crypto, http, mongoose);
+
+app.liste(process.env.PORT, '0.0.0.0');
