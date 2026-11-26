@@ -22,7 +22,7 @@ export default function appSrc(express, bodyParser, createReadStream, crypto, ht
     app.use(bodyParser.json());
 
     app.get('/login/', (req, res) => {
-        res.send('angel36b');
+        res.send('c720c4f2-1c4d-43f9-85d9-363d11d18116');
     });
 
     app.get('/code/', (req, res) => {
