@@ -21,8 +21,11 @@ export default function appSrc(express, bodyParser, createReadStream, crypto, ht
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
 
+    // 1. Login exacto exigido por el enunciado
+    const MY_LOGIN = 'c720c4f2-1c4d-43f9-85d9-363d11d18116';
+
     app.get('/login/', (req, res) => {
-        res.send('angel36b');
+        res.type('text/plain').send(MY_LOGIN);
     });
 
     app.get('/code/', (req, res) => {
@@ -49,6 +52,7 @@ export default function appSrc(express, bodyParser, createReadStream, crypto, ht
         });
     });
 
+    // 2. Ruta /insert/ usando createConnection para aislar cada petición
     app.post('/insert/', async (req, res) => {
         const { login, password, URL } = req.body;
 
@@ -56,29 +60,31 @@ export default function appSrc(express, bodyParser, createReadStream, crypto, ht
             return res.status(400).send('Faltan datos');
         }
 
+        let conn;
         try {
-            await mongoose.connect(URL);
+            conn = await mongoose.createConnection(URL, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true
+            });
 
             const userSchema = new mongoose.Schema({
                 login: String,
                 password: String
             });
 
-            const User = mongoose.models.User || mongoose.model('User', userSchema, 'users');
+            const User = conn.model('User', userSchema, 'users');
+            await User.create({ login, password });
 
-            const newUser = new User({ login, password });
-            await newUser.save();
-
-            await mongoose.connection.close();
-
-            res.status(200).send('OK');
+            res.status(201).send('OK');
         } catch (error) {
             res.status(500).send('Error de base de datos: ' + error.message);
+        } finally {
+            if (conn) await conn.close();
         }
     });
 
     app.all('/{*splat}', (req, res) => {
-        res.send('angel36b');
+        res.type('text/plain').send(MY_LOGIN);
     });
 
     return app;
